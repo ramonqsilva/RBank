@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RBank | Painel do Cliente</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+        .container {
+            width: 100%;
+            max-width: 480px;
+        }
+        .card {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            color: #3b82f6;
+        }
+        .chip {
+            background: #334155;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .select-container {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .select-container select {
+            width: 100%;
+            background: #334155;
+            color: #ffffff;
+            border: 1px solid #475569;
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+        }
+        .user-info {
+            margin-bottom: 25px;
+        }
+        .user-info h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+        .user-info p {
+            color: #94a3b8;
+            font-size: 0.85rem;
+        }
+        .badge {
+            background: #2563eb;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .address-box {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #93c5fd;
+            margin-top: 10px;
+            word-wrap: break-word;
+        }
+        .balance-section {
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            border: 1px solid #1e293b;
+        }
+        .balance-label {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+        }
+        .balance-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #10b981;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        .action-form {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+        .action-form input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: white;
+            font-size: 0.95rem;
+            outline: none;
+            width: 100%;
+        }
+        .action-form input:focus {
+            border-color: #3b82f6;
+        }
+        .btn {
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.95rem;
+            transition: opacity 0.2s;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        .btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .btn-blue { background: #3b82f6; color: white; }
+        .btn-green { background: #10b981; color: white; }
+        .btn-red { background: #ef4444; color: white; }
+        
+        .footer-info {
+            display: flex;
+            justify-content: space-between;
+            color: #475569;
+            font-size: 0.75rem;
+            margin-top: 25px;
+            border-top: 1px solid #334155;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">  
+        <div class="card">
+            <div class="header">
+                <div class="logo">RBANK</div>
+                <div class="chip"><h3 style="color: white;">{{ nome[0] | upper }}</h3></div>
+            </div>
+
+            <div class="select-container">
+                <form action="/" method="get">
+                    <select name="cliente" id="cliente" onchange="this.form.submit()">
+                        <option value="" disabled {% if not cliente_selecionado %}selected{% endif %}>Escolha uma Conta...</option>
+                        {% for c in todos_clientes %}
+                            <option value="{{ c }}" {% if c == cliente_selecionado %}selected{% endif %}>{{ c }}</option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <div class="user-info">
+                <h1>{{ nome }}</h1>
+                <p>RM: {{ rm }} | Status: <span class="badge">{{ status }}</span></p>
+                <div class="address-box">📍 {{ endereco }}</div>
+            </div>
+
+            <div class="balance-section">
+                <div class="balance-label">Saldo Disponível</div>
+                <div class="balance-value">R$ {{ "{:,.2f}".format(saldo) }}</div>
+            </div>
+
+            <div class="form-group">
+                <form action="/buscar-cep" method="post" class="action-form">
+                    <input type="hidden" name="cliente_atual" value="{{ cliente_selecionado }}">
+                    <input type="text" name="cep" placeholder="Atualizar CEP (somente números)" required maxlength="9">
+                    <button type="submit" class="btn btn-blue" {% if not cliente_selecionado %}disabled{% endif %}>Salvar</button>
+                </form>
+
+                <form action="/depositar" method="post" class="action-form">
+                    <input type="hidden" name="cliente_atual" value="{{ nome }}">
+                    <input type="number" name="valor" step="0.01" min="0.01" placeholder="Valor Depósito" required>
+                    <button type="submit" class="btn btn-green" {% if not cliente_selecionado %}disabled{% endif %}>Depositar</button>
+                </form>
+
+                <form action="/sacar" method="post" class="action-form">
+                    <input type="hidden" name="cliente_atual" value="{{ nome }}">
+                    <input type="number" name="valor" step="0.01" min="0.01" placeholder="Valor Saque" required>
+                    <button type="submit" class="btn btn-red" {% if not cliente_selecionado %}disabled{% endif %}>Sacar</button>
+                </form>
+            </div>
+
+            <div class="footer-info">
+                <span>RBANK DESDE 2026</span>
+                <span>v1.0</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

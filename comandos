@@ -1,0 +1,19 @@
+Comandos Utilizados:
+
+---------- ATV1 ----------
+python3 -m venv myenv
+Windows:
+        myenv\Scripts\activate
+Linux:  
+        source myenv/bin/activate
+
+pip install fastapi uvicorn
+
+uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+---------- ATV4 ----------
+Windows:
+        myenv\Scripts\activate
+        
+python main.py
